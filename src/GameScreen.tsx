@@ -162,7 +162,7 @@ function GameScreen() {
       <GameSubHeader userSelections={userSelections} roundPlayed={roundPlayed} currentRoundResult={currentRoundResult} winningPosition={winningPosition} getWinningAmount={getWinningAmount} botPosition={botPosition} />
       {
         choiceOfplays.map((position, index) => {
-          return <PositionBox backgroundColor={colors[position]["backgroundColor"]} borderColor={colors[position]["borderColor"]} textColor={colors[position]["textColor"]} isPositionSelected={userSelections.includes(position)} handleUserSelection={handleUserSelection} playOf={position} currentBet={currentBets[position]} handleBetChipClick={handleBetChipClick} roundPlayed={roundPlayed} />
+          return <PositionBox key={index} backgroundColor={colors[position]["backgroundColor"]} borderColor={colors[position]["borderColor"]} textColor={colors[position]["textColor"]} isPositionSelected={userSelections.includes(position)} handleUserSelection={handleUserSelection} playOf={position} currentBet={currentBets[position]} handleBetChipClick={handleBetChipClick} roundPlayed={roundPlayed} />
         })
       }
       <GameAction userSelections={userSelections} roundPlayed={roundPlayed} clearStages={clearStages} handlePlay={handlePlay} />
