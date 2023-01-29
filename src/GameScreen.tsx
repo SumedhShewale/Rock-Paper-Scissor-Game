@@ -1,4 +1,7 @@
 import * as React from "react";
+import GameAction from "./GameAction";
+import GameStats from "./GameStats";
+import GameSubHeader from "./GameSubHeader";
 import { plays } from "./literals";
 import PositionBox from "./PositionBox";
 
@@ -13,10 +16,6 @@ function GameScreen() {
   const [roundPlayed, setRoundPlayed]: [boolean, Function] = React.useState(false)
   const choiceOfplays: plays[] = ['ROCK', 'PAPER', 'SCISSOR']
   const minimumBet = 500
-
-  React.useEffect(() => {
-    setTotalBetPriceAvailable(totalBetPriceAvailable - getAmountInAllBets())
-  }, [currentBets])
 
   const clearStages = () => {
     setUserSelections([])
@@ -69,9 +68,6 @@ function GameScreen() {
       let winningAmount: number = getWinningAmount(currentWinningPosition)
       setTotalBetPriceAvailable(totalBetPriceAvailable + winningAmount)
     }
-    else {
-      setTotalBetPriceAvailable(totalBetPriceAvailable)
-    }
   }
 
   const getWinningAmount = (currentWinningPosition: plays) => {
@@ -89,6 +85,7 @@ function GameScreen() {
     if (userSelections.length < 2 && !userSelections.includes(currentSelection)) {
       setUserSelections([...userSelections, currentSelection])
       setCurrentBets({ ...currentBets, [currentSelection]: currentBets[currentSelection] + minimumBet })
+      addBet()
     }
     else {
       alert("You can only select maximum of two different positions.")
@@ -97,9 +94,10 @@ function GameScreen() {
 
   const handleBetChipClick = (playOf: plays) => {
     if (userSelections.includes(playOf)) {
-      let isBetAvailable = (currentBets["ROCK"] + currentBets["PAPER"] + currentBets["SCISSOR"] + minimumBet) <= totalBetPriceAvailable
+      let isBetAvailable = totalBetPriceAvailable >= minimumBet
       if (isBetAvailable) {
         setCurrentBets({ ...currentBets, [playOf]: currentBets[playOf] + minimumBet })
+        addBet()
       }
       else {
         alert("Not enough balance available.")
@@ -107,8 +105,46 @@ function GameScreen() {
     }
   }
 
+  const addBet = () => {
+    setTotalBetPriceAvailable(totalBetPriceAvailable - minimumBet)
+  }
+
   const getAmountInAllBets = () => {
     return currentBets["ROCK"] + currentBets["PAPER"] + currentBets["SCISSOR"]
+  }
+
+  let colors: {
+    "ROCK": {
+      backgroundColor: string;
+      borderColor: string;
+      textColor: string
+    },
+    "PAPER": {
+      backgroundColor: string;
+      borderColor: string;
+      textColor: string
+    },
+    "SCISSOR": {
+      backgroundColor: string;
+      borderColor: string;
+      textColor: string
+    }
+  } = {
+    "ROCK": {
+      backgroundColor: "#211f4f",
+      borderColor: "#2e4b90",
+      textColor: "#2680ea"
+    },
+    "PAPER": {
+      backgroundColor: "#1a381d",
+      borderColor: "#187e3a",
+      textColor: "#16c158"
+    },
+    "SCISSOR": {
+      backgroundColor: "#50091e",
+      borderColor: "#9a0e30",
+      textColor: "#e01541"
+    }
   }
 
   return (
@@ -122,73 +158,15 @@ function GameScreen() {
         flexWrap: "wrap",
       }}
     >
-      <div style={{
-        width: "100%",
-        textAlign: "center",
-        position: "absolute",
-        top: "0px",
-        left: "0px",
-        right: "0px",
-        backgroundColor: "black"
-      }}>
-        <span style={{ paddingLeft: "30px", color: "#c7a878" }}>BALANCE: </span><span style={{ paddingRight: "30px", color: "white" }}>{totalBetPriceAvailable /* getAvailableBetAmount() */}</span>
-        <span style={{ paddingLeft: "30px", color: "#c7a878" }}>BET: </span><span style={{ paddingRight: "30px", color: "white" }}>{getAmountInAllBets()}</span>
-        <span style={{ paddingLeft: "30px", color: "#c7a878" }}>WIN: </span><span style={{ paddingRight: "30px", color: "white" }}>{wins}</span>
-      </div>
-      {userSelections.length === 0 ?
-        <div style={{
-          width: "100%",
-          display: "flex",
-          justifyContent: "center",
-          marginBottom: "40px"
-        }}>
-          <span style={{ color: "#cbab7b", fontWeight: "bold" }}>PICK YOUR POSITIONS</span>
-        </div>
-        :
-        roundPlayed ?
-          (currentRoundResult ?
-            <div style={{
-              width: "100%",
-              marginBottom: "80px",
-              textAlign: "center"
-            }}>
-              <h1 style={{ color: "#16c359", fontWeight: "bolder" }}>{`${winningPosition} WON`}</h1>
-              <span><h2 style={{ color: "#d4b37f", fontWeight: "bold", display: "inline" }}>YOU WIN </h2><h2 style={{ color: "white", fontWeight: "bold", display: "inline" }}>{getWinningAmount(winningPosition)}</h2></span>
-            </div>
-            :
-            <div style={{
-              width: "100%",
-              marginBottom: "80px",
-              textAlign: "center"
-            }}>
-              <span><h2 style={{ color: "white", fontWeight: "bold", display: "inline", padding: "0 30px" }}>{botPosition}</h2><h2 style={{ color: "#d4b37f", display: "inline", padding: "0 30px" }}>vs</h2><h2 style={{ color: "white", fontWeight: "bold", display: "inline", padding: "0 30px" }}>{userSelections[0]}</h2></span>
-            </div>)
-          :
-          null
+      <GameStats totalBetPriceAvailable={totalBetPriceAvailable} getAmountInAllBets={getAmountInAllBets} wins={wins} />
+      <GameSubHeader userSelections={userSelections} roundPlayed={roundPlayed} currentRoundResult={currentRoundResult} winningPosition={winningPosition} getWinningAmount={getWinningAmount} botPosition={botPosition} />
+      {
+        choiceOfplays.map((position, index) => {
+          return <PositionBox backgroundColor={colors[position]["backgroundColor"]} borderColor={colors[position]["borderColor"]} textColor={colors[position]["textColor"]} isPositionSelected={userSelections.includes(position)} handleUserSelection={handleUserSelection} playOf={position} currentBet={currentBets[position]} handleBetChipClick={handleBetChipClick} roundPlayed={roundPlayed} />
+        })
       }
-      <PositionBox key={0} backgroundColor={"#211f4f"} borderColor={"#2e4b90"} textColor={"#2680ea"} isPositionSelected={userSelections.includes(choiceOfplays[0])} handleUserSelection={handleUserSelection} playOf={choiceOfplays[0]} currentBet={currentBets[choiceOfplays[0]]} handleBetChipClick={handleBetChipClick} roundPlayed={roundPlayed} />
-      <PositionBox key={1} backgroundColor={"#1a381d"} borderColor={"#187e3a"} textColor={"#16c158"} isPositionSelected={userSelections.includes(choiceOfplays[1])} handleUserSelection={handleUserSelection} playOf={choiceOfplays[1]} currentBet={currentBets[choiceOfplays[1]]} handleBetChipClick={handleBetChipClick} roundPlayed={roundPlayed} />
-      <PositionBox key={2} backgroundColor={"#50091e"} borderColor={"#9a0e30"} textColor={"#e01541"} isPositionSelected={userSelections.includes(choiceOfplays[2])} handleUserSelection={handleUserSelection} playOf={choiceOfplays[2]} currentBet={currentBets[choiceOfplays[2]]} handleBetChipClick={handleBetChipClick} roundPlayed={roundPlayed} />
-      <div style={{
-        width: "100%",
-        display: "flex",
-        justifyContent: "center",
-        marginTop: "80px"
-      }}>
-        <button style={{
-          backgroundColor: "black",
-          color: userSelections.length > 0 ? "#c6a776" : "#4d463b",
-          border: `3px solid ${userSelections.length > 0 ? "#c6a776" : "#4d463b"}`,
-          height: "90px",
-          width: "180px",
-          borderRadius: "50px",
-          fontWeight: "bold",
-          cursor: userSelections.length > 0 ? "pointer" : "inherit"
-        }}
-          disabled={userSelections.length === 0}
-          onClick={() => roundPlayed ? clearStages() : handlePlay()}>{roundPlayed ? "CLEAR" : "PLAY"}</button>
-      </div>
-    </div >
+      <GameAction userSelections={userSelections} roundPlayed={roundPlayed} clearStages={clearStages} handlePlay={handlePlay} />
+    </div>
   );
 }
 
