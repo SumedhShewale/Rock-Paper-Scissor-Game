@@ -1,7 +1,7 @@
 import * as React from "react";
 
-function BetChip(props: { playOf: string, betAmount: number, handleBetChipClick: Function }) {
-    const { playOf, betAmount, handleBetChipClick } = props
+function BetChip(props: { playOf: string, betAmount: number, handleBetChipClick: Function, roundPlayed: boolean }) {
+    const { playOf, betAmount, handleBetChipClick, roundPlayed } = props
     return (
         <div style={{
             width: "48px",
@@ -16,9 +16,9 @@ function BetChip(props: { playOf: string, betAmount: number, handleBetChipClick:
             border: "4px solid #225eff",
             borderRadius: "50%",
             marginBottom: "10px",
-            cursor: "pointer",
+            cursor: roundPlayed ? "inherit" : "pointer",
         }}
-            onClick={(e) => { e.stopPropagation(); handleBetChipClick(playOf) }}
+            onClick={(e) => { e.stopPropagation(); !roundPlayed && handleBetChipClick(playOf) }}
         >
             {betAmount}
         </div>

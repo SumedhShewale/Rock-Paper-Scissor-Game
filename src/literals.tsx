@@ -1,1 +1,1 @@
-export type plays = "ROCK" | "PAPER" | "SCISSOR"
+export type plays = "ROCK" | "PAPER" | "SCISSOR";

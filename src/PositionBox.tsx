@@ -1,8 +1,8 @@
 import * as React from "react";
 import BetChip from "./BetChip";
 
-function PositionBox(props: { backgroundColor: string; borderColor: string; textColor: string; isPositionSelected: boolean; handleUserSelection: Function; playOf: string; currentBet: number; handleBetChipClick: Function; }) {
-    const { backgroundColor, borderColor, textColor, isPositionSelected, handleUserSelection, playOf, currentBet, handleBetChipClick } = props
+function PositionBox(props: { backgroundColor: string; borderColor: string; textColor: string; isPositionSelected: boolean; handleUserSelection: Function; playOf: string; currentBet: number; handleBetChipClick: Function; roundPlayed: boolean }) {
+    const { backgroundColor, borderColor, textColor, isPositionSelected, handleUserSelection, playOf, currentBet, handleBetChipClick, roundPlayed } = props
     return (
         <div
             style={{
@@ -13,15 +13,15 @@ function PositionBox(props: { backgroundColor: string; borderColor: string; text
                 alignContent: "center",
                 justifyContent: "space-evenly",
                 flexWrap: "wrap",
-                border: isPositionSelected ? `4px solid ${borderColor}` : "",
+                border: isPositionSelected ? `5px solid ${borderColor}` : "",
                 borderRadius: "10px",
                 color: textColor,
                 fontWeight: "bold",
-                cursor: "pointer"
+                cursor: roundPlayed ? "inherit" : "pointer",
             }}
-            onClick={() => handleUserSelection(playOf)}
+            onClick={() => !roundPlayed && handleUserSelection(playOf)}
         >
-            <BetChip playOf={playOf} betAmount={currentBet} handleBetChipClick={handleBetChipClick} />
+            <BetChip playOf={playOf} roundPlayed={roundPlayed} betAmount={currentBet} handleBetChipClick={handleBetChipClick} />
             <div style={{
                 width: "100%",
                 display: "flex",
