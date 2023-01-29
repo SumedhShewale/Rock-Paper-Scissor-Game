@@ -30,6 +30,7 @@ function GameSubHeader(props: { userSelections: plays[]; roundPlayed: boolean; c
                     marginBottom: "80px",
                     textAlign: "center"
                 }}>
+                    <h1 style={{ color: "#e01541", fontWeight: "bolder" }}>{"LOST"}</h1>
                     <span><h2 style={{ color: "white", fontWeight: "bold", display: "inline", padding: "0 30px" }}>{botPosition}</h2><h2 style={{ color: "#d4b37f", display: "inline", padding: "0 30px" }}>vs</h2><h2 style={{ color: "white", fontWeight: "bold", display: "inline", padding: "0 30px" }}>{userSelections[0]}</h2></span>
                 </div>)
             :
