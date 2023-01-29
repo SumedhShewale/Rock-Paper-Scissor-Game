@@ -83,9 +83,7 @@ function GameScreen() {
 
   const handleUserSelection = (currentSelection: plays) => {
     if (userSelections.length < 2 && !userSelections.includes(currentSelection)) {
-      setUserSelections([...userSelections, currentSelection])
-      setCurrentBets({ ...currentBets, [currentSelection]: currentBets[currentSelection] + minimumBet })
-      addBet()
+      addBet(currentSelection, true)
     }
     else {
       alert("You can only select maximum of two different positions.")
@@ -94,19 +92,20 @@ function GameScreen() {
 
   const handleBetChipClick = (playOf: plays) => {
     if (userSelections.includes(playOf)) {
-      let isBetAvailable = totalBetPriceAvailable >= minimumBet
-      if (isBetAvailable) {
-        setCurrentBets({ ...currentBets, [playOf]: currentBets[playOf] + minimumBet })
-        addBet()
-      }
-      else {
-        alert("Not enough balance available.")
-      }
+      addBet(playOf, false)
     }
   }
 
-  const addBet = () => {
-    setTotalBetPriceAvailable(totalBetPriceAvailable - minimumBet)
+  const addBet = (playOf: plays, addUserSelection: boolean) => {
+    let isBetAvailable = totalBetPriceAvailable >= minimumBet
+    if (isBetAvailable) {
+      addUserSelection && setUserSelections([...userSelections, playOf])
+      setCurrentBets({ ...currentBets, [playOf]: currentBets[playOf] + minimumBet })
+      setTotalBetPriceAvailable(totalBetPriceAvailable - minimumBet)
+    }
+    else {
+      alert("Not enough balance available.")
+    }
   }
 
   const getAmountInAllBets = () => {
