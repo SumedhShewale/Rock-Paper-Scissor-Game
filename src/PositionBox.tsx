@@ -1,5 +1,5 @@
 import * as React from "react";
-import BetChip from "./BetChip";
+import BetChip from "./components/BetChip";
 
 function PositionBox(props: { backgroundColor: string; borderColor: string; textColor: string; isPositionSelected: boolean; handleUserSelection: Function; playOf: string; currentBet: number; handleBetChipClick: Function; roundPlayed: boolean }) {
     const { backgroundColor, borderColor, textColor, isPositionSelected, handleUserSelection, playOf, currentBet, handleBetChipClick, roundPlayed } = props

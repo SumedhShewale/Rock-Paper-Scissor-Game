@@ -1,5 +1,5 @@
 import * as React from "react";
-import { plays } from "./literals";
+import { plays } from "../utils/literals";
 
 function GameAction(props: { userSelections: plays[]; roundPlayed: boolean; clearStages: Function; handlePlay: Function }) {
     const { userSelections, roundPlayed, clearStages, handlePlay } = props

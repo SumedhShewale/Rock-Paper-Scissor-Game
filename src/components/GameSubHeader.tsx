@@ -1,5 +1,5 @@
 import * as React from "react";
-import { plays } from "./literals";
+import { plays } from "../utils/literals";
 
 function GameSubHeader(props: { userSelections: plays[]; roundPlayed: boolean; currentRoundResult: boolean; winningPosition: plays; getWinningAmount: Function; botPosition: plays }) {
     const { userSelections, roundPlayed, currentRoundResult, winningPosition, getWinningAmount, botPosition } = props

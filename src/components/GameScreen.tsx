@@ -1,9 +1,9 @@
 import * as React from "react";
+import PositionBox from "../PositionBox";
+import { plays } from "../utils/literals";
 import GameAction from "./GameAction";
 import GameStats from "./GameStats";
 import GameSubHeader from "./GameSubHeader";
-import { plays } from "./literals";
-import PositionBox from "./PositionBox";
 
 function GameScreen() {
   const [totalBetPriceAvailable, setTotalBetPriceAvailable]: [number, Function] = React.useState(5000)
